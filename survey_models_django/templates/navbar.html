@@ -27,6 +27,7 @@
         {% csrf_token %}
         <form method="GET" action="{% url 'tests_list' %}" class="form-inline my-2 my-lg-0 search__form" style="display: flex; flex-direction: row;">
             <input class="form-control mr-sm-2" type="search" placeholder="Search test..." aria-label="Search" name="search">
+            {% if form.from_date %}
             <div class="dropdown" >
                 <button style="min-height: 50px; margin-left: 1vw;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 Date ranges
@@ -57,6 +58,7 @@
                     </li>
                 </ul>
             </div>
+            {% endif %}
             <button class="btn btn-outline-dark my-2 my-sm-0 search__btn" type="submit">Search</button>
         </form>
     </div>
