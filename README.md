@@ -5,7 +5,6 @@
 4. cd survey_models_django
 5. python manage.py runserver
 
-### Base version of survey app
 
 ### TESTED WITH:
 * Windows 10
