@@ -1,3 +1,4 @@
+### Date picker doesn't work with firefox
 ### INSTALLATION:
 1. git clone https://github.com/DenMaslov/quiz-tests.git
 2. pipenv shell
