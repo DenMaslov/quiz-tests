@@ -3,7 +3,7 @@
 **Report is updated every day at midnight**
 
 ### INSTALLATION:
-1. git clone https://github.com/DenMaslov/quiz_logs_tests.git
+1. **For auth hometask**  git clone --branch auth  https://github.com/DenMaslov/quiz-tests.git
 2. cd quiz_logs_tests
 3. pipenv shell
 4. pipenv install
