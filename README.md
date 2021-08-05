@@ -1,4 +1,5 @@
-**For auth hometask**  git clone --branch auth  https://github.com/DenMaslov/quiz-tests.git \n
+**For auth hometask**  git clone --branch auth  https://github.com/DenMaslov/quiz-tests.git 
+
 **Report is updated every day at midnight**
 
 ### INSTALLATION:
