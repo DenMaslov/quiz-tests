@@ -1,4 +1,7 @@
 ### Date picker doesn't work with firefox
+
+**For auth hometask**  git clone --branch auth  https://github.com/DenMaslov/quiz-tests.git
+
 ### INSTALLATION:
 1. git clone https://github.com/DenMaslov/quiz-tests.git
 2. pipenv shell
