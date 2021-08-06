@@ -13,6 +13,9 @@ django-nose = "*"
 pytest = "*"
 pytest-django = "*"
 celery = "*"
+django-modeltranslation = "*"
+python-memcached = "*"
+pymemcache = "*"
 
 [requires]
 python_version = "3.9"

@@ -1,9 +1,11 @@
 {% extends '_base.html' %}
-{% block title %}Tests{% endblock title %}
+{% load i18n %}
+{% block title %}{% translate "Tests" %}{% endblock title %}
 {% block content %}
 {% if not test_list %}
 <div class="container" style="text-align: center; margin-top: 10vh;">
-    <h1 class="post__title">Sorry, can not find any matches...<br/> check the spelling and try again</h1>
+    <h1 class="post__title">{% translate "Sorry, can not find any matches..." %}<br/>
+        {% translate "check the spelling and try again" %}</h1>
 </div>
 {% else %}
 <div class="row" style="margin-bottom: 25px; margin-top: 10vh;">
@@ -15,9 +17,9 @@
             <div class="card-body">
                 <h5 class="card-title">{{ test.title }}</h5>
                 <p class="card-text">{{ test.description|truncatechars:50 }}</p>
-                <p class="card-text data__text">Created: {{ test.created_at}}</p>
-                <a href="/{{ test.id }}/" class="btn btn-primary">Start...</a>
-                <a href="{% url 'history' test.id %}" class="btn btn-dark">History</a>
+                <p class="card-text data__text">{% translate "Created" %}: {{ test.created_at}}</p>
+                <a href="{% url 'post_detail' test.id %}" class="btn btn-primary">{% translate "Start..." %}</a>
+                <a href="{% url 'history' test.id %}" class="btn btn-dark">{% translate "History" %}</a>
             </div>
         </div>
     </div>
@@ -32,9 +34,9 @@
             <div class="card-body">
                 <h5 class="card-title">{{ test.title }}</h5>
                 <p class="card-text">{{ test.description|truncatechars:50 }}</p>
-                <p class="card-text data__text">Created: {{ test.created_at}}</p>
-                <a href="/{{ test.id }}/" class="btn btn-primary">Start...</a>
-                <a href="{% url 'history' test.id %}" class="btn btn-dark">History</a>
+                <p class="card-text data__text">{% translate "Created" %}: {{ test.created_at}}</p>
+                <a href="{% url 'post_detail' test.id %}" class="btn btn-primary">{% translate "Start..." %}</a>
+                <a href="{% url 'history' test.id %}" class="btn btn-dark">{% translate "History" %}</a>
             </div>
         </div>
     </div>

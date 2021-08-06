@@ -1,16 +1,17 @@
 {% extends '_base.html' %}
+{% load i18n %}
 
-{% block title %}Scores{% endblock title %}
+{% block title %}{% translate "Scores" %}{% endblock title %}
 
 {% block content %}
 <div class="container" style="margin-bottom: 100px;">
   <h1 class="post__title">{{user.username}}:</h1>
   <table>
       <tr>
-        <th colspan="2">Test</th>
-        <th>User</th>
-        <th>Points</th>
-        <th>Finished at</th>
+        <th colspan="2">{% translate "Test" %}</th>
+        <th>{% translate "User" %}</th>
+        <th>{% translate "Points" %}</th>
+        <th>{% translate "Finished at" %}</th>
       </tr>
   {% for session in test_sessions %}
   <tr>

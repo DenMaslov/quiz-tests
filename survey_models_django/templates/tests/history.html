@@ -1,14 +1,15 @@
 {% extends '_base.html' %}
+{% load i18n %}
 
 {% block title %}{{test.user}}{% endblock title %}
 
 {% block content %}
 <table>
     <tr>
-      <th colspan="2">Test</th>
-      <th>User</th>
-      <th>Points</th>
-      <th>Finished at</th>
+      <th colspan="2">{% translate "Test" %}</th>
+        <th>{% translate "User" %}</th>
+        <th>{% translate "Points" %}</th>
+        <th>{% translate "Finished at" %}</th>
     </tr>
 {% for session in testrun_list %}
 <tr>

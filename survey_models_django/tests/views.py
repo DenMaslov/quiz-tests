@@ -1,6 +1,6 @@
 import os
-import mimetypes
 from quiz import settings
+from django.db.models import Q
 from .forms import ModelForm
 from django.utils import timezone
 from django.shortcuts import redirect
@@ -30,17 +30,19 @@ class TestListView(ListView):
         return context
 
     def get_queryset(self):
+        log.debug("GET FROM DB!!!")
         search = self.request.GET.get("search", None)
         suffix_order = self.request.GET.get("order", "")
         date_from, date_to = self.get_clean_time_ranges()
 
-        log.debug(f'Return Tests search: {search}; ranges: {date_from}, {date_to}')
+        log.debug(
+            f'Return Tests search: {search}; ranges: {date_from}, {date_to}')
         if search:
-            return Test.objects.filter(title__icontains=search,
-                                        created_at__range=[date_from, date_to]).order_by(
-                                                                suffix_order + self.ORDER_FIELD)
+            return Test.objects.filter(Q(title_en__icontains=search) | Q(title_uk__icontains=search),
+                                       created_at__range=[date_from, date_to]).order_by(
+                suffix_order + self.ORDER_FIELD)
         return Test.objects.filter(
-                created_at__range=[date_from, date_to]).order_by(suffix_order + self.ORDER_FIELD)
+            created_at__range=[date_from, date_to]).order_by(suffix_order + self.ORDER_FIELD)
 
     def get_clean_time_ranges(self):
         """Returns date_from and date_to"""
@@ -53,13 +55,10 @@ class TestListView(ListView):
         return date_from, date_to
 
 
-        
-
-class TestDetailView(LoginRequiredMixin, DetailView):
+class TestDetailView(DetailView):
     login_url = "/auth/login/"
     model = Test
     template_name = 'tests/detail.html'
-
 
 
 class TestSessionView(LoginRequiredMixin, DetailView):
@@ -74,19 +73,21 @@ class TestSessionView(LoginRequiredMixin, DetailView):
 
     def create_test_session(self, request, test: Test) -> None:
         points = 0
-        instance = Testrun.objects.create(test=test, user=self.get_user(request))
+        instance = Testrun.objects.create(
+            test=test, user=self.get_user(request))
         for question in test.questions.all():
             answer_id = request.POST.get(str(question.id))
             if answer_id != None:
                 user_option = Option.objects.get(id=answer_id)
                 instance.answers.add(Answer.objects.create(user_answer=user_option,
-                                                        question=question))
+                                                           question=question))
                 if user_option == question.right_option:
                     points += 1
             else:
                 instance.is_completed = False
         instance.points = points
-        log.debug(f'Saving session: {instance.test}; {instance.user}; {instance.points}; {instance.finished_at}')
+        log.debug(
+            f'Saving session: {instance.test}; {instance.user}; {instance.points}; {instance.finished_at}')
         instance.save()
 
     def get_user(self, request):
@@ -98,6 +99,7 @@ class TestSessionView(LoginRequiredMixin, DetailView):
 class TestSessionHistoryView(ListView):
     model = Testrun
     template_name = 'tests/history.html'
+
     def get_queryset(self):
         return Testrun.objects.filter(test__id=self.request.resolver_match.kwargs['pk']).order_by('-finished_at')
     ordering = ['-finished_at']
@@ -109,15 +111,18 @@ class TestScoreView(LoginRequiredMixin, ListView):
     model = Testrun
     template_name = 'tests/myscores.html'
     context_object_name = 'test_sessions'
+
     def get_queryset(self):
         return Testrun.objects.filter(user__id=self.request.user.id).order_by('-finished_at')
-        
-    
+
+
 def download_file(request):
     filepath = settings.REPORT_FILE_PATH
     if os.path.exists(filepath):
         with open(filepath, 'r') as file:
-            resp = HttpResponse(file.read(), content_type="application/adminupload")
-            resp['Content-Disposition'] = 'inline;filename=' + os.path.basename(filepath)
+            resp = HttpResponse(
+                file.read(), content_type="application/adminupload")
+            resp['Content-Disposition'] = 'inline;filename=' + \
+                os.path.basename(filepath)
             return resp
     raise Http404

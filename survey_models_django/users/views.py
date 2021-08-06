@@ -21,8 +21,9 @@ def register(request):
             log.debug(f"Registration failed")
             error = "Invalid data, check the fields"
 
-    context = {'form':form, 'error':error}
+    context = {'form': form, 'error': error}
     return render(request, 'users/register.html', context)
+
 
 def login_user(request):
 
@@ -37,6 +38,7 @@ def login_user(request):
             return redirect(request.GET.get('next', '/'))
     context = {}
     return render(request, 'users/login.html', context)
+
 
 def logout_user(request):
     log.debug(f"Log out user: {request.user.username}")
