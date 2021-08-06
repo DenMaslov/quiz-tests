@@ -10,7 +10,7 @@ from .views import (TestListView,
 
 
 urlpatterns = [
-    path('', cache_page(60*60)(TestListView.as_view()), name='tests_list'),
+    path('', TestListView.as_view(), name='tests_list'),
     path('myscores/', TestScoreView.as_view(), name='myscores'),
     path('<int:pk>/', cache_page(60*60)(TestDetailView.as_view()), name='post_detail'),
     path('start/<int:pk>/', TestSessionView.as_view(), name='start'),
