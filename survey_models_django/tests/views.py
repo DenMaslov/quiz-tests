@@ -30,7 +30,6 @@ class TestListView(ListView):
         return context
 
     def get_queryset(self):
-        log.debug("GET FROM DB!!!")
         search = self.request.GET.get("search", None)
         suffix_order = self.request.GET.get("order", "")
         date_from, date_to = self.get_clean_time_ranges()
