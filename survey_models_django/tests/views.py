@@ -1,5 +1,7 @@
 import logging
 import os
+
+from django.core.checks.messages import Error
 from quiz import settings
 from django.db.models import Q
 from .forms import ModelForm
@@ -74,9 +76,26 @@ class TestListView(ListView):
 
 
 class TestDetailView(DetailView):
-    login_url = "/auth/login/"
     model = Test
     template_name = 'tests/detail.html'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs['pk']
+        key = 'test-' + str(pk)
+
+        #Get from cache if data exists in cache
+        data_from_cache = cache.get(key)
+        if data_from_cache:
+            log.debug(f'Get cached data for key {key}')
+            return data_from_cache
+        
+        #If cache does not have such obj - get from db and set to cache with termination 10 min
+        try:
+            test = Test.objects.get(pk=pk)
+            cache.set(key, test, 60 * 10)
+            return test
+        except:
+            raise Http404('There is not such obj')
 
 
 class TestSessionView(LoginRequiredMixin, DetailView):
