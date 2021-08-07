@@ -2,7 +2,7 @@
 
 **For auth hometask**  git clone --branch auth  https://github.com/DenMaslov/quiz-tests.git 
 
-**Report is updated every day at midnight**
+**Report is updated every day at 20.00**
 
 ### INSTALLATION:
 1. **For auth hometask**  git clone --branch auth  https://github.com/DenMaslov/quiz-tests.git
