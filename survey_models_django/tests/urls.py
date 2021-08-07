@@ -1,4 +1,3 @@
-from django.views.decorators.cache import cache_page
 from django.urls import path
 from .views import (TestListView,
                     TestDetailView,
@@ -12,7 +11,7 @@ from .views import (TestListView,
 urlpatterns = [
     path('', TestListView.as_view(), name='tests_list'),
     path('myscores/', TestScoreView.as_view(), name='myscores'),
-    path('<int:pk>/', cache_page(60*60)(TestDetailView.as_view()), name='post_detail'),
+    path('<int:pk>/', TestDetailView.as_view(), name='post_detail'),
     path('start/<int:pk>/', TestSessionView.as_view(), name='start'),
     path('history/<int:pk>/', TestSessionHistoryView.as_view(), name='history'),
     path('download/', download_file, name='report'),
