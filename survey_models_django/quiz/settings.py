@@ -124,6 +124,10 @@ USE_TZ = False
 
 CACHES = {
     'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'exchange_rate_cache',
+    },
+    'views_cache': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     }
