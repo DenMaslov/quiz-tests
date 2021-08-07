@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-06 20:57+0300\n"
+"POT-Creation-Date: 2021-08-07 13:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,9 +70,9 @@ msgstr "Вийти"
 msgid "Sign up"
 msgstr "Створити"
 
-#: .\templates\navbar.html:31
+#: .\templates\navbar.html:31 .\templates\users\login.html:8
 msgid "Sign in"
-msgstr "Зайти"
+msgstr "Увійти"
 
 #: .\templates\navbar.html:51
 msgid "Search test..."
@@ -118,24 +118,36 @@ msgstr "ПОЧАТИ"
 msgid "Question"
 msgstr "Питання"
 
+#: .\templates\tests\history.html:9 .\templates\tests\myscores.html:11
+msgid "Test"
+msgstr "Тести"
+
+#: .\templates\tests\history.html:10 .\templates\tests\myscores.html:12
+msgid "User"
+msgstr "Користувач"
+
+#: .\templates\tests\history.html:11 .\templates\tests\myscores.html:13
+msgid "Points"
+msgstr "Очки"
+
+#: .\templates\tests\history.html:12 .\templates\tests\myscores.html:14
+msgid "Finished at"
+msgstr "Закінчено о"
+
 #: .\templates\tests\myscores.html:4
 #, fuzzy
 #| msgid "My scores"
 msgid "Scores"
 msgstr "Результати"
 
-#: .\templates\tests\myscores.html:11
-msgid "Test"
-msgstr "Тести"
-
-#: .\templates\tests\myscores.html:12
-msgid "User"
+#: .\templates\users\login.html:11 .\templates\users\register.html:12
+msgid "Username"
 msgstr "Користувач"
 
-#: .\templates\tests\myscores.html:13
-msgid "Points"
-msgstr "Очки"
+#: .\templates\users\login.html:12 .\templates\users\register.html:13
+msgid "Password"
+msgstr "Пароль"
 
-#: .\templates\tests\myscores.html:14
-msgid "Finished at"
-msgstr "Закінчено о"
+#: .\templates\users\register.html:14
+msgid "Confirm Password"
+msgstr "Підтвердити пароль"
