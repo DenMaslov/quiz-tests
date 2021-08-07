@@ -6,7 +6,7 @@
 
 ### INSTALLATION:
 1. **For auth hometask**  git clone --branch auth  https://github.com/DenMaslov/quiz-tests.git
-2. cd quiz_logs_tests
+2. cd quiz_tests
 3. pipenv shell
 4. pipenv install
 5. cd survey_models_django
