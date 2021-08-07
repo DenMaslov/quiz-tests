@@ -1,3 +1,4 @@
+import logging
 import os
 from quiz import settings
 from django.db.models import Q
@@ -6,12 +7,12 @@ from django.utils import timezone
 from django.shortcuts import redirect
 from django.http.response import Http404, HttpResponse
 from .models import Answer, Option, Test, Testrun
-from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import caches
 
+cache = caches['views_cache']
 
-import logging
 
 log = logging.getLogger('app_info')
 
@@ -34,14 +35,32 @@ class TestListView(ListView):
         suffix_order = self.request.GET.get("order", "")
         date_from, date_to = self.get_clean_time_ranges()
 
-        log.debug(
-            f'Return Tests search: {search}; ranges: {date_from}, {date_to}')
+        #Return cached data for already searched query with same params
+        cache_key = self.create_cache_key(search, date_from, date_to, suffix_order)
+        data_from_cache = cache.get(cache_key)
+        if data_from_cache:
+            log.debug(f'Get cached data for key {cache_key}')
+            return data_from_cache
+
+        #If searching params are unique - cached new result, expiration - 10 minutes
+        log.debug(f'Return Tests search: {search}; ranges: {date_from}, {date_to}')
         if search:
-            return Test.objects.filter(Q(title_en__icontains=search) | Q(title_uk__icontains=search),
-                                       created_at__range=[date_from, date_to]).order_by(
+            tests = Test.objects.filter(Q(title_en__icontains=search) | Q(title_uk__icontains=search),
+                                        created_at__range=[date_from, date_to]).order_by(
                 suffix_order + self.ORDER_FIELD)
-        return Test.objects.filter(
+            cache.set(cache_key, tests, 60 * 10)
+            return tests
+        tests = Test.objects.filter(
             created_at__range=[date_from, date_to]).order_by(suffix_order + self.ORDER_FIELD)
+        cache.set(cache_key, tests, 60 * 10)
+        return tests
+
+    def create_cache_key(self, search, date_from, date_to, suffix_order) -> str:
+        """Creates simple key for caching"""
+        search = str(search).replace(" ", '')
+        date_from = str(date_from).replace(" ", '')
+        date_to = str(date_to).replace(" ", '')[:12]
+        return date_from + search + date_to + suffix_order
 
     def get_clean_time_ranges(self):
         """Returns date_from and date_to"""
