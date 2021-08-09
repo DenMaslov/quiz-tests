@@ -9,5 +9,5 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('auth/', include('users.urls')),
-    path('', include('tests.urls')),
+    path('', include('tests_app.urls')),
 )

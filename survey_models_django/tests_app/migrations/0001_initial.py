@@ -32,8 +32,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('text', models.TextField()),
-                ('options', models.ManyToManyField(related_name='question_set', to='tests.Option')),
-                ('right_option', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='question', to='tests.option')),
+                ('options', models.ManyToManyField(related_name='question_set', to='tests_app.Option')),
+                ('right_option', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='question', to='tests_app.option')),
             ],
         ),
         migrations.CreateModel(
@@ -41,21 +41,21 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(blank=True, max_length=200, null=True, unique=True)),
-                ('questions', models.ManyToManyField(blank=True, related_name='test', to='tests.Question')),
+                ('questions', models.ManyToManyField(blank=True, related_name='test', to='tests_app.Question')),
             ],
         ),
         migrations.CreateModel(
             name='Testrun',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answers', models.ManyToManyField(blank=True, related_name='answers', to='tests.Answer')),
-                ('test', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tests.test')),
+                ('answers', models.ManyToManyField(blank=True, related_name='answers', to='tests_app.Answer')),
+                ('test', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tests_app.test')),
             ],
         ),
         migrations.AddField(
             model_name='answer',
             name='question',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tests.question'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tests_app.question'),
         ),
         migrations.AddField(
             model_name='answer',
@@ -65,6 +65,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='answer',
             name='user_answer',
-            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='tests.option'),
+            field=models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='tests_app.option'),
         ),
     ]
