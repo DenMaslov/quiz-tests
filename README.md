@@ -1,5 +1,8 @@
 **Dockerhub**  https://hub.docker.com/repository/docker/denmaslov/quiz
+
 use **docker pull denmaslov/quiz:dz**  - to download image
+
+**docker run -p 8000:8000 denmaslov/quiz:dz** - to run
 
 
 
