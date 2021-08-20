@@ -8,7 +8,7 @@ use **docker pull denmaslov/quiz:dz**  - to download image
 
 ### INSTALLATION:
 1. git clone --branch docker https://github.com/DenMaslov/quiz-tests.git
-2. cd quiz_logs_tests
+2. cd quiz-tests
 3. pipenv shell
 4. pipenv install
 5. cd survey_models_django
