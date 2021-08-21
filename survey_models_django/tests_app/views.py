@@ -21,14 +21,14 @@ class TestListView(ListView):
 
     def get_queryset(self):
         search = self.request.GET.get("search", None)
-        suffix_order = self.request.GET.get("order", "")
+        order_field = self.get_order_field()
         date_from, date_to = self.get_clean_time_ranges()
         if search:
             return Test.objects.filter(title__icontains=search,
                                         created_at__range=[date_from, date_to]).order_by(
-                                                                suffix_order + self.ORDER_FIELD)
+                                                                order_field)
         return Test.objects.filter(
-                created_at__range=[date_from, date_to]).order_by(suffix_order + self.ORDER_FIELD)
+                created_at__range=[date_from, date_to]).order_by(order_field)
 
     def get_clean_time_ranges(self):
         """Returns date_from and date_to"""
@@ -39,6 +39,11 @@ class TestListView(ListView):
         if date_from == "":
             date_from = self.OLD_DATE
         return date_from, date_to
+    
+    def get_order_field(self) -> str:
+        """Returns orderfield"""
+        prefixes_order = self.request.GET.get("order", "")
+        return prefixes_order + self.ORDER_FIELD
 
 
         
