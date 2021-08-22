@@ -1,10 +1,14 @@
 from django.contrib import admin
-from .models import Option, Question, Test, Testrun, Answer
+from .models import Option, Question, Test, Testrun, TestrunQuestions
 
 
-class AnswerAdmin(admin.ModelAdmin):
-    model = Answer
-    list_display = ['question', 'user_answer',]
+class TestrunQuestionsAdmin(admin.ModelAdmin):
+    model = TestrunQuestions
+    list_display = ['question', 'testrun', 'answer']
+
+
+class TestrunQuestionsInline(admin.TabularInline):
+    model = Testrun.questions.through
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -20,10 +24,11 @@ class TestAdmin(admin.ModelAdmin):
 class TestrunAdmin(admin.ModelAdmin):
     model = Testrun
     list_display = ['id', 'test', 'points','finished_at']
+    inlines = [TestrunQuestionsInline]
 
 
 admin.site.register(Option)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Testrun, TestrunAdmin)
 admin.site.register(Test, TestAdmin)
-admin.site.register(Answer, AnswerAdmin)
+admin.site.register(TestrunQuestions, TestrunQuestionsAdmin)

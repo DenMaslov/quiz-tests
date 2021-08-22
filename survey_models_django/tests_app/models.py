@@ -18,11 +18,6 @@ class Question(models.Model):
         return self.text
 
 
-class Answer(models.Model):
-    user_answer = models.ForeignKey(Option, on_delete=models.CASCADE, default=None, null=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-
-
 class Test(models.Model):
     title = models.CharField(max_length=200, blank=True, null=True, unique=True)
     questions = models.ManyToManyField(Question, related_name="test", blank=True)
@@ -36,9 +31,37 @@ class Test(models.Model):
 
 class Testrun(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
-    answers = models.ManyToManyField(Answer, related_name="answers", blank=True)
+    questions = models.ManyToManyField(
+        Question,
+        through='TestrunQuestions',
+        related_name='testruns'
+    )
     points = models.PositiveIntegerField(default=0, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, default=None, null=True)
     finished_at = models.DateTimeField(auto_now_add=True)
     is_completed = models.BooleanField(default=True)
 
+    def update_points(self):
+        testrun_questions = TestrunQuestions.objects.filter(testrun=self)
+        points = 0
+        for instance in testrun_questions:
+            if instance.is_right:
+                points += 1
+        self.points = points
+        self.save()
+
+
+class TestrunQuestions(models.Model):
+    testrun = models.ForeignKey(
+        Testrun,
+        on_delete=models.CASCADE,
+        related_name="testrunquestions",
+    )
+    question = models.ForeignKey(
+            Question,
+            on_delete=models.CASCADE,
+            related_name="testrunquestions",
+    )
+    answer = models.ForeignKey(Option,        
+            on_delete=models.CASCADE)
+    is_right = models.BooleanField(default=False)

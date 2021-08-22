@@ -1,7 +1,7 @@
 from .forms import ModelForm
 from django.utils import timezone
 from django.shortcuts import redirect
-from .models import Answer, Option, Test, Testrun
+from .models import TestrunQuestions, Option, Test, Testrun
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -25,10 +25,10 @@ class TestListView(ListView):
         date_from, date_to = self.get_clean_time_ranges()
         if search:
             return Test.objects.filter(title__icontains=search,
-                                        created_at__range=[date_from, date_to]).order_by(
-                                                                order_field)
+                                       created_at__range=[date_from, date_to]).order_by(
+                order_field)
         return Test.objects.filter(
-                created_at__range=[date_from, date_to]).order_by(order_field)
+            created_at__range=[date_from, date_to]).order_by(order_field)
 
     def get_clean_time_ranges(self):
         """Returns date_from and date_to"""
@@ -39,14 +39,12 @@ class TestListView(ListView):
         if date_from == "":
             date_from = self.OLD_DATE
         return date_from, date_to
-    
+
     def get_order_field(self) -> str:
         """Returns orderfield"""
         prefixes_order = self.request.GET.get("order", "")
         return prefixes_order + self.ORDER_FIELD
 
-
-        
 
 class TestDetailView(DetailView):
     model = Test
@@ -63,18 +61,17 @@ class TestSessionView(DetailView):
         return redirect('/')
 
     def create_test_session(self, request, test: Test) -> None:
-        points = 0
         instance = Testrun.objects.create(test=test, user=self.get_user(request))
         for question in test.questions.all():
             answer_id = request.POST.get(str(question.id))
             if answer_id is not None:
                 user_option = Option.objects.get(id=answer_id)
-                instance.answers.add(Answer.objects.create(user_answer=user_option,
-                                                        question=question))
-                if user_option == question.right_option:
-                    points += 1
-        instance.points = points
-        instance.save()
+                is_answer_right = user_option == question.right_option
+                TestrunQuestions.objects.create(testrun=instance,
+                                                question=question,
+                                                answer=user_option,
+                                                is_right=is_answer_right)
+        instance.update_points()
 
     def get_user(self, request):
         if request.user.is_authenticated:
@@ -85,9 +82,10 @@ class TestSessionView(DetailView):
 class TestSessionHistoryView(ListView):
     model = Testrun
     template_name = 'tests/history.html'
+
     def get_queryset(self):
-        return Testrun.objects.filter(test__id=self.request.resolver_match.kwargs['pk']).order_by('-finished_at')
-    ordering = ['-finished_at']
+        return Testrun.objects.filter(
+            test__id=self.request.resolver_match.kwargs['pk']).order_by('-finished_at')
 
 
 class TestScoreView(LoginRequiredMixin, ListView):
@@ -96,7 +94,7 @@ class TestScoreView(LoginRequiredMixin, ListView):
     model = Testrun
     template_name = 'tests/myscores.html'
     context_object_name = 'test_sessions'
+
     def get_queryset(self):
-        return Testrun.objects.filter(user__id=self.request.user.id).order_by('-finished_at')
-        
-    
+        return Testrun.objects.filter(
+                user__id=self.request.user.id).order_by('-finished_at')
